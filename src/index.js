@@ -1,6 +1,7 @@
 const express = require('express');
 const app     = express();
 const port    = 8080;
+const connection = require('./config');
 const square = require("./lib/square")
 
 app.disable("x-powered-by")
@@ -24,5 +25,6 @@ module.exports = {
     app,
     closeServer: () => {
         server.close();
+        connection.close();
     }
 };
