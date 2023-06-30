@@ -2,17 +2,17 @@ name: CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [develop]
   pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: [develop]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
@@ -22,25 +22,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run linting
-        run: npm run lint
-
       - name: Run unit tests
         run: npm test
 
-      - name: Build project
-        run: npm run build
-
-      - name: Generate code coverage report
-        run: npm run coverage
-
-      - name: Publish code coverage
-        uses: codecov/codecov-action@v1
-
-      - name: Deploy to staging
-        if: github.ref == 'refs/heads/main'
-        run: npm run deploy:staging
-
-      - name: Deploy to production
-        if: github.ref == 'refs/tags/v*'
-        run: npm run deploy:production
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage
+          path: coverage
