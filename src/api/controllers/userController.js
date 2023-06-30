@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { User } = require('../models');
+const { User } = require('../models/userModel');
 
 const saltRounds = 10; 
 
@@ -12,7 +12,7 @@ async function validatePassword(plainPassword, hashedPassword) {
     return await bcrypt.compare(plainPassword, hashedPassword);
 }
 
-exports.signup = async (req, res, next) => {
+exports.userRegister = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const hashedPassword = await hashPassword(password);
@@ -32,7 +32,7 @@ exports.signup = async (req, res, next) => {
     }
 }
 
-exports.login = async (req, res, next) => {
+exports.userLogin = async (req, res, next) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });

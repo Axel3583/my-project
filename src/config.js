@@ -1,23 +1,13 @@
 require('dotenv').config();
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
-  host     : process.env.RDS_HOSTNAME,
-  user     : process.env.RDS_USERNAME,
-  password : process.env.RDS_PASSWORD,
-  port     : process.env.RDS_PORT,
-  database : process.env.RDS_DBNAME
+const Sequelize = require('sequelize');
+
+const sequelize = new Sequelize(process.env.RDS_DBNAME, process.env.RDS_USERNAME, process.env.RDS_PASSWORD, {
+  host: process.env.RDS_HOSTNAME,
+  dialect: 'mysql',
+  port: process.env.RDS_PORT,
 });
 
-connection.connect(function(err) {
-  if (err) {
-    console.error('Database connection failed: ' + err.stack);
-    return;
-  }
 
-  console.log('Connected to database.');
-});
-
-connection.end();
-
-module.exports = connection
+module.exports = sequelize;
