@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const square = require("./lib/square");
 const connection = require("./config");
 
@@ -9,7 +8,6 @@ const app = express();
 const port = 8080;
 
 // Configure express middlewares
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.disable("x-powered-by");
