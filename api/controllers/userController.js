@@ -12,6 +12,15 @@ const validatePassword = async (plainPassword, hashedPassword) => {
   return await bcrypt.compare(plainPassword, hashedPassword);
 };
 
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.userRegister = async (req, res, next) => {
   try {
     const { email, password } = req.body;
