@@ -36,7 +36,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-let server; // Declare server here
+let server;
 
 // Start the server
 connection
@@ -45,7 +45,7 @@ connection
     console.log(
       "Connection to the database has been established successfully."
     );
-    server = app.listen(port, () => {  // Define server here
+    server = app.listen(port, () => { 
       console.log(`Server is running on port ${port}`);
     });
   })
@@ -56,7 +56,7 @@ connection
 module.exports = {
   app,
   closeServer: () => {
-    server && server.close();
-    connection && connection.close();
+    server.close();
+    connection.close();
   },
 };
