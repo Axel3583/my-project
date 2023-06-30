@@ -56,7 +56,10 @@ connection
 module.exports = {
   app,
   closeServer: () => {
-    server.close();
+    if (server) {
+      server.close();
+    }
     connection.close();
   },
 };
+
