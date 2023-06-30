@@ -1,14 +1,26 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../../config');
 
-const sequelize = new Sequelize(process.env.RDS_DBNAME, process.env.RDS_USERNAME, process.env.RDS_PASSWORD, {
-  host: process.env.RDS_HOSTNAME,
-  dialect: 'mysql',
-  port: process.env.RDS_PORT
-});
-
-const User = sequelize.define('User', {
-  username: DataTypes.STRING,
-  password: DataTypes.STRING,
+const User = sequelize.define('Users', {
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: sequelize.literal('CURRENT_TIMESTAMP')
+  }
 }, {});
 
 module.exports = User;
+

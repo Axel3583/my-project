@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const { User } = require('../models/userModel');
+const User = require('../models/userModel');
 
 const saltRounds = 10; 
 
@@ -14,23 +14,30 @@ async function validatePassword(plainPassword, hashedPassword) {
 
 exports.userRegister = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-        const hashedPassword = await hashPassword(password);
-        const newUser = await User.create({
-            email,
-            password: hashedPassword,
-            accessToken: jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
-                expiresIn: "1d"
-            })
-        });
-        res.json({
-            data: newUser,
-            message: 'You have signed up successfully'
-        })
+      const { email, password } = req.body;
+      const hashedPassword = await hashPassword(password);
+      
+      console.log(email, hashedPassword)
+      const newUser = await User.create({
+        email,
+        password: hashedPassword
+      });
+      
+      const accessToken = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
+        expiresIn: "30 days"
+      });
+      
+      await newUser.update({ accessToken });
+      
+      res.json({
+        data: newUser,
+        message: 'You have signed up successfully'
+      });
     } catch (error) {
-        next(error);
+      next(error);
     }
-}
+  }
+  
 
 exports.userLogin = async (req, res, next) => {
     try {
