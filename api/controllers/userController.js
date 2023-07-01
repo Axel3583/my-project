@@ -26,14 +26,20 @@ exports.userRegister = async (req, res, next) => {
     const { email, password } = req.body;
     const hashedPassword = await hashPassword(password);
 
-    console.log(email, hashedPassword);
+    const existingUser = await User.findOne({ where: { email } });
+    if (existingUser) {
+      return res.status(409).json({
+        message: 'Email already exists',
+      });
+    }
+
     const newUser = await User.create({
       email,
       password: hashedPassword,
     });
 
     const accessToken = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
-      expiresIn: "30 days",
+      expiresIn: '30 days',
     });
 
     await newUser.update({ accessToken });
@@ -46,6 +52,7 @@ exports.userRegister = async (req, res, next) => {
     next(error);
   }
 };
+
 
 exports.userLogin = async (req, res, next) => {
   try {

@@ -1,5 +1,6 @@
 const express = require("express");
 const square = require("./lib/square");
+const cors = require('cors');
 const connection = require("./config");
 
 const userRoute = require("./api/routes/userRoute");
@@ -23,6 +24,15 @@ app.get("/square/:nb", (req, res) => {
 });
 
 userRoute(app); // pass the express app instance to userRoute
+
+// Configuration des en-têtes CORS
+app.use(
+  cors({
+    origin: 'http://localhost:4200', // L'origine de votre application Angular
+    methods: ['GET', 'POST'], // Les méthodes HTTP autorisées
+    allowedHeaders: ['Content-Type', 'Authorization'], // Les en-têtes autorisés
+  })
+);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
